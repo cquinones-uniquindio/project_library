@@ -1,0 +1,54 @@
+<div class="card border-primary mb-3">
+    <div class="card-header">Books</div>
+    <div class="card-body text-primary">
+      <h5 class="card-title">Book List</h5>
+      <div class="my-2 text-left">
+        <button class="btn btn-rounded btn-primary" type="button" [routerLink]="['/books/form']" *ngIf="isLoged()">
+          Create Book
+        </button>
+        <button class="btn btn-rounded btn-primary" type="button" *ngIf="isLoged()" (click)="getByZone()">
+          Books by zone
+        </button>
+      </div>
+      <div *ngIf="books?.length == 0" class="alert alert-info">
+        No hay libros disponibles!
+      </div>
+      <table class="table table-bordered table-striped" *ngIf="books?.length>0">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Category age</th>
+            <th>State</th>
+            <th *ngIf="isLoged()">Edit</th>
+            <th *ngIf="isLoged()">Delete</th>
+            <th *ngIf="isLoged()">Borrow</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let book of books">
+            <td>{{ book.id }}</td>
+            <td>{{ book.name }}</td>
+            <td>{{ book.categoryAge }}</td>
+            <td>{{ book.state }}</td>
+            <td *ngIf="isLoged()">
+              <button type="button" name="editar" [routerLink]="['/books/form', book.id]" class="btn btn-primary btn-sm">editar</button>
+            </td>
+            <td *ngIf="isLoged()">
+              <button type="button" name="eliminar" (click)='delete(book)' class="btn btn-danger btn-sm">eliminar</button>
+            </td>
+            <td *ngIf="isLoged() && book.state; else returnBook">
+              <button type="button" name="solicitar" (click)='createBorrow(book)' class="btn btn-info btn-sm">Borrow book</button>
+            </td>
+            <ng-template #returnBook>
+              <td *ngIf="isLoged() && !book.state">
+                <button type="button" name="devolver" (click)='changeBookState(book, true)' class="btn btn-info btn-sm">Return book</button>
+              </td>
+            </ng-template>
+          </tr>
+        </tbody>
+      </table>
+  
+    </div>
+  </div>
+  
